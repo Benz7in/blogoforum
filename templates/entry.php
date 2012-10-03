@@ -35,9 +35,10 @@
 
 <h2>
     <a href="?act=view-entry&id=<?=$row['id']?>"><?=$row['header']?></a>
-    <?php if ($_SESSION['IS_ADMIN'] == 1) : ?>
-    <a href="?act=edit-entry&id=<?=$row['id']?>"><i class="icon-edit"></i></a>
-    <a href="?act=delete-entry&id=<?=$row['id']?>"><i class="icon-trash"></i></a>
+    <?php if (isset($_SESSION['loginId']) && (trim($_SESSION['loginId']) != '') &&
+             (trim($_SESSION['loginId'])==$row['author_id'])) : ?>
+        <a href="?act=edit-entry&id=<?=$row['id']?>"><i class="icon-edit"></i></a>
+        <a onClick="return confirmDelete()" href="?act=delete-entry&id=<?=$row['id']?>"><i class="icon-trash"></i></a>
     <?php endif ?>
 </h2>
 <p class="content"><?=$row['content']?></p>
@@ -50,23 +51,26 @@
     <!--<a href="?act=view-entry&id=<?=$row['id']?>">comments</a>-->
 </div>
 
-<h4>Comments</h4>
+<?php if (isset($comments) && ($comments != null)): ?>
+    <h4>Comments</h4>
 
-<?php foreach($comments as $row): ?>
-    <div class="entry">
-        <div class="comment-header">
-            <!--<small><small>-->
-            <span class="date"><?=$row['date']?></span>
-            <span class="author"><b><?=$row['author']?></b></span>
-            <!--</small></small>-->
-            <p class="comment-content"><?=$row['content']?></p>
+    <?php foreach($comments as $row): ?>
+        <div class="entry">
+            <div class="comment-header">
+                <!--<small><small>-->
+                <span class="date"><?=$row['date']?></span>
+                <span class="author"><b><?=$row['author']?></b></span>
+                <!--</small></small>-->
+                <p class="comment-content"><?=$row['content']?></p>
+            </div>
         </div>
-    </div>
-<?php endforeach ?>
+    <?php endforeach ?>
+<?php endif ?>
 
-
-<h4>Add new comment</h4>
-<?php require('comment_add.php') ?>
+    <?php if (isset($_SESSION['loginId']) && (trim($_SESSION['loginId']) != '')) : ?>
+    <h4>Add new comment</h4>
+    <?php require('comment_add.php') ?>
+<?php endif?>
 
 <?php require("footer.php") ?>
 

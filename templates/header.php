@@ -22,6 +22,9 @@
     <![endif]-->
     <script src="jquery/jquery-1.8.0.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/delete_entry.js" type="text/JavaScript">
+    </script>
+
 </head>
 
 <body>
@@ -37,11 +40,13 @@
             <div class="nav-collapse collapse">
                 <ul class="nav">
                     <li class="active"><a href="/">Home</a></li>
-                    <?php if (session_is_registered(loginId)): ?>
-                        <li><a href="?act=logout"><?=$_SESSION['userName']?></a></li>
+<!--                    <li><a href="">--><?//=$_SESSION['loginId']?><!-- (123fuckyou)</a></li>-->
+                    <?php if (isset($_SESSION['loginId']) && ($_SESSION['loginId'] != '')): ?>
+                        <li><a href="?act=logout"><?=$_SESSION['userName']?> (Logout)</a></li>
                     <?php else: ?>
                         <li><a href="?act=login">Login</a></li>
                     <?php endif ?>
+                    <li><a href="?act=register">Registration</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>

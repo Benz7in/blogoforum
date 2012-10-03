@@ -28,15 +28,19 @@
     }
 </style>
 
-<h1>Header of the blog</h1>
+<h1>Posts</h1>
 
 <?php foreach($records as $row): ?>
     <div class="entry">
         <h2>
             <a href="?act=view-entry&id=<?=$row['id']?>"><?=$row['header']?></a>
-            <?php if ($_SESSION['IS_ADMIN'] == 1) : ?>
-            <a href="?act=edit-entry&id=<?=$row['id']?>"><i class="icon-edit"></i></a>
-            <a href="?act=delete-entry&id=<?=$row['id']?>"><i class="icon-trash"></i></a>
+
+            <?php if (isset($_SESSION['loginId']) && (trim($_SESSION['loginId']) != '') &&
+                     (trim($_SESSION['loginId'])==$row['author_id'])) : ?>
+                <a href="?act=edit-entry&id=<?=$row['id']?>"><i class="icon-edit"></i></a>
+                <a id="delete" onClick="return confirmDelete()" href="?act=delete-entry&id=<?=$row['id']?>">
+                    <i class="icon-trash"></i>
+                </a>
             <?php endif ?>
         </h2>
         <p class="content"><?=$row['content']?></p>
@@ -71,9 +75,11 @@
     <?php } ?>
 </div>
 
-<?php if(isset($_SESSION['IS_ADMIN'])) { ?>
+<?php if(isset($_SESSION['loginId']) && (trim($_SESSION['loginId']) != '')) { ?>
     <h1>Add new entry</h1>
     <?php require('entry_add.php') ?>
+<?php } else { ?>
+    <label>To add posts or comments you should be authorized</label>
 <?php } ?>
 
 
